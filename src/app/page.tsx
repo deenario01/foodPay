@@ -1,7 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import styles from './homepage.module.css';
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
@@ -53,21 +55,33 @@ export default function Login() {
   };
 
   return (
-    <>
-      <h1>Welcome to FoodPay!</h1>
-      <h4>Please enter your email to login</h4>
+    <main className={styles.container}>
+      <Image 
+        src="/images/smiling_burger.png" 
+        alt="FoodPay Logo" 
+        width={300} 
+        height={300} 
+        priority 
+      />
+      <h1 className={styles.heading}>Welcome to FoodPay!</h1>
+      <h4 className={styles.subheading}>Please enter your email to login</h4>
       <input
         type="email"
+        className={styles.input}
         placeholder="Enter email"
         value={email}
         onChange={(e) => {
-            console.log('Email input changed:', e.target.value);
-            setEmail(e.target.value)}
-        }    
+          console.log("Email input changed:", e.target.value);
+          setEmail(e.target.value);
+        }}
       />
-      <button onClick={sendOtp} disabled={loading || !email}>
+      <button
+        onClick={sendOtp}
+        disabled={loading || !email}
+        className={styles.button}
+      >
         {loading ? "Sending..." : "Login"}
       </button>
-    </>
+    </main>
   );
 }

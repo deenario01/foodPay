@@ -1,0 +1,27 @@
+/* src/app/globals.css */
+:root {
+    --primary: #ff6b00;
+    --primary-dark: #cc5500;
+    --text: #000;
+    --bg: #fff;
+    --input-bg: #fff;
+    --btn-text: #fff;
+  }
+  
+  [data-theme="dark"] {
+    --primary: #ff9500;
+    --primary-dark: #cc7700;
+    --text: #fff;
+    --bg: #000;
+    --input-bg: #1a1a1a;
+    --btn-text: #000;
+  }
+  
+  body {
+    margin: 0;
+    font-family: sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    transition: all 0.3s ease;
+  }
+  

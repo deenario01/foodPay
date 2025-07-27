@@ -1,3 +1,9 @@
+import styles from './dashboard.module.css';
+
 export default function Dashboard() {
-    return <h1>This is your dashboard</h1>; 
-}
+    return (
+      <div className={styles.container}>
+        <h1 className={styles.heading}>This is your dashboard</h1>
+      </div>
+    );
+  }

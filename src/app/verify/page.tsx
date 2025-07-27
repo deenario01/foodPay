@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import styles from './verify.module.css';
 
 export default function Verify() {
   const [userOtp, setUserOtp] = useState<string>("");
@@ -28,15 +29,18 @@ export default function Verify() {
   };
 
   return (
-    <>
-      <h2>OTP sent to {email}</h2>
-      <input
-        type="text"
-        placeholder="Enter OTP"
-        value={userOtp}
-        onChange={(e) => setUserOtp(e.target.value)}
-      />
-      <button onClick={verifyOtp}>Verify OTP</button>
-    </>
+    <main className={styles.container}>
+    <h2 className={styles.heading}>OTP sent to {email}</h2>
+    <input
+      type="text"
+      placeholder="Enter OTP"
+      className={styles.input}
+      value={userOtp}
+      onChange={(e) => setUserOtp(e.target.value)}
+    />
+    <button onClick={verifyOtp} className={styles.button}>
+      Verify OTP
+    </button>
+  </main>
   );
 }
