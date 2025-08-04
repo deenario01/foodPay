@@ -1,0 +1,118 @@
+/* src/app/verify/verify.module.css */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Add this line */
+    padding: 3rem;
+    min-height: 100vh;
+    background-color: var(--bg);
+  }
+
+  .heading {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .input {
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    background-color: var(--input-bg);
+    color: var(--text);
+  }
+  
+  .button {
+    background-color: var(--primary);
+    color: var(--btn-text);
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .description {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--text);
+    max-width: 400px;
+    line-height: 1.6;
+  }
+  
+  .message {
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    font-size: 0.875rem;
+    text-align: center;
+    max-width: 400px;
+  }
+  
+  .message:not(:empty) {
+    background-color: #f0f9ff;
+    color: #0369a1;
+    border: 1px solid #0ea5e9;
+  }
+  
+  .backButton {
+    background-color: transparent;
+    color: var(--text);
+    border: 1px solid var(--text);
+    padding: 0.6rem 1.5rem;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 1rem;
+  }
+  
+  .backButton:hover {
+    background-color: var(--text);
+    color: var(--bg);
+  }
+  
+  .resendButton {
+    background-color: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    padding: 0.6rem 1.5rem;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 0.5rem;
+  }
+  
+  .resendButton:hover {
+    background-color: var(--primary);
+    color: var(--btn-text);
+  }
+  
+  .resendButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .loading {
+    text-align: center;
+  }
+  
+  .loading h2 {
+    margin-bottom: 1rem;
+  }
+  
+  .loading p {
+    color: var(--text);
+    opacity: 0.8;
+  }

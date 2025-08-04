@@ -1,9 +1,25 @@
-import styles from './dashboard.module.css';
+"use client";
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Dashboard() {
-    return (
-      <div className={styles.container}>
-        <h1 className={styles.heading}>This is your dashboard</h1>
-      </div>
-    );
-  }
+  const router = useRouter();
+
+  useEffect(() => {
+    // Redirect to stats page by default
+    router.push('/dashboard/stats');
+  }, [router]);
+
+  return (
+    <div style={{ 
+      display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center', 
+      height: '100vh',
+      fontSize: '1.2rem'
+    }}>
+      Redirecting to dashboard...
+    </div>
+  );
+}

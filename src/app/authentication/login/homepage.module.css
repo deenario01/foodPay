@@ -47,3 +47,18 @@
     color: var(--text);
   }
   
+  .message {
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    font-size: 0.875rem;
+    text-align: center;
+    max-width: 400px;
+  }
+  
+  .message:not(:empty) {
+    background-color: #f0f9ff;
+    color: #0369a1;
+    border: 1px solid #0ea5e9;
+  }
+  
