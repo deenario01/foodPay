@@ -1,24 +1,24 @@
-# FoodPay - Email OTP Authentication System
+# FoodPay - Supabase Authentication System
 
-A modern, secure authentication system built with Next.js and TypeScript that uses email-based OTP (One-Time Password) verification.
+A modern, secure authentication system built with Next.js, TypeScript, and Supabase that uses email-based magic link authentication.
 
 ## 🚀 Features
 
-- **Email-based Authentication**: Secure login using email and OTP
-- **Real-time OTP Generation**: 6-digit random OTP generation
-- **Email Integration**: Automated email delivery using Resend API
+- **Magic Link Authentication**: Secure login using email and magic links
+- **Supabase Integration**: Full authentication backend powered by Supabase
 - **TypeScript Support**: Full type safety throughout the application
-- **Responsive Design**: Centered, professional UI layout
-- **Local Storage**: Secure OTP storage for verification
+- **Responsive Design**: Modern UI with professional styling
 - **Route Protection**: Automatic redirection for unauthorized access
+- **User Dashboard**: Protected dashboard with user information
+- **Session Management**: Automatic session handling with Supabase
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 14 (App Router)
+- **Framework**: Next.js 15 (App Router)
 - **Language**: TypeScript
-- **Styling**: Inline CSS with Flexbox
-- **Email Service**: Resend API
-- **State Management**: React useState
+- **Authentication**: Supabase Auth
+- **Styling**: CSS Modules with modern design
+- **State Management**: React useState & useEffect
 - **Routing**: Next.js Navigation
 
 ## 📁 Project Structure
@@ -27,16 +27,23 @@ A modern, secure authentication system built with Next.js and TypeScript that us
 foodPay/
 ├── src/
 │   ├── app/
-│   │   ├── api/
-│   │   │   └── send-email/
-│   │   │       └── route.ts          # Email API endpoint
-│   │   ├── verify/
-│   │   │   └── page.tsx              # OTP verification page
+│   │   ├── auth/
+│   │   │   └── callback/
+│   │   │       └── page.tsx          # Auth callback handler
 │   │   ├── dashboard/
-│   │   │   └── page.tsx              # Dashboard page
+│   │   │   ├── dashboard.module.css   # Dashboard styles
+│   │   │   └── page.tsx              # Protected dashboard page
+│   │   ├── homepage.module.css        # Homepage styles
+│   │   ├── globals.css               # Global styles
 │   │   ├── layout.tsx                # Root layout
 │   │   └── page.tsx                  # Login page
+│   ├── lib/
+│   │   └── supabaseClient.ts         # Supabase client configuration
 │   └── ...
+├── public/
+│   └── images/
+│       ├── smiling_burger.png        # App logo
+│       └── smiling_food.png          # Additional assets
 ├── .env.local                        # Environment variables
 └── README.md
 ```
@@ -47,7 +54,7 @@ foodPay/
 
 - Node.js 18+ 
 - npm or yarn
-- Resend account for email service
+- Supabase account
 
 ### Installation
 
@@ -62,18 +69,19 @@ foodPay/
    npm install
    ```
 
-3. **Set up environment variables**
+3. **Set up Supabase**
+   
+   - Create a new project at [supabase.com](https://supabase.com)
+   - Get your project URL and anon key from Settings > API
+   - Enable Email Auth in Authentication > Settings
+
+4. **Set up environment variables**
    
    Create a `.env.local` file in the root directory:
    ```env
-   RESEND_API_KEY=your_resend_api_key_here
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
    ```
-
-4. **Get your Resend API key**
-   - Sign up at [resend.com](https://resend.com)
-   - Go to API Keys section
-   - Create a new API key
-   - Copy the key to your `.env.local` file
 
 5. **Run the development server**
    ```bash
@@ -90,79 +98,62 @@ foodPay/
 
 1. **Login Page** (`/`)
    - User enters email address
-   - System generates 6-digit OTP
-   - OTP is sent via email using Resend API
-   - User is redirected to verification page
+   - System sends magic link via Supabase Auth
+   - User receives email with authentication link
+   - User clicks link to authenticate
 
-2. **Verification Page** (`/verify`)
-   - User enters the OTP received via email
-   - System validates OTP against stored value
-   - On successful verification, user is redirected to dashboard
+2. **Auth Callback** (`/auth/callback`)
+   - Handles the magic link callback from Supabase
+   - Validates the authentication session
+   - Redirects to dashboard on success
 
 3. **Dashboard** (`/dashboard`)
    - Protected page accessible only after successful authentication
+   - Displays user information (email, ID, creation date)
+   - Provides logout functionality
 
 ### Security Features
 
-- **OTP Generation**: Cryptographically secure random 6-digit numbers
-- **Local Storage**: OTP stored securely in browser localStorage
+- **Magic Link Authentication**: Secure, passwordless authentication
+- **Supabase Session Management**: Automatic session handling
 - **Route Protection**: Automatic redirection for unauthorized access
 - **Input Validation**: Email format validation and required field checks
+- **Secure Callback Handling**: Proper authentication flow management
 
 ## 📧 Email Configuration
 
-The application uses Resend for email delivery. To configure:
+The application uses Supabase Auth for email delivery:
 
-1. **Verify your domain** (recommended for production)
-   - Add your domain in Resend dashboard
-   - Update the `from` address in the API route
-
-2. **For testing** (free tier)
-   - You can only send emails to your own email address
-   - Perfect for development and testing
+### Supabase Auth
+- Handles magic link generation and delivery
+- Manages authentication sessions
+- Provides secure callback handling
+- Uses Supabase's built-in email templates
 
 ## 🎨 UI Components
 
 ### Login Page
+- Modern design with red accent columns
 - Centered layout with professional styling
 - Email input with validation
 - Loading states for better UX
 - Disabled button when email is empty
+- FoodPay branding with smiling burger logo
 
-### Verification Page
-- Clean, centered design
-- OTP input with proper formatting
-- Real-time validation feedback
-- Secure OTP comparison
-
-## 🔧 API Endpoints
-
-### POST `/api/send-email`
-
-Sends OTP via email using Resend API.
-
-**Request Body:**
-```json
-{
-  "email": "user@example.com",
-  "otp": 123456
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": { ... }
-}
-```
+### Dashboard
+- Clean, professional design
+- User information display
+- Logout functionality
+- Loading states during authentication check
 
 ## 🚀 Deployment
 
 ### Vercel (Recommended)
 
 1. **Connect your GitHub repository**
-2. **Add environment variables** in Vercel dashboard
+2. **Add environment variables** in Vercel dashboard:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 3. **Deploy automatically** on push to main branch
 
 ### Other Platforms
@@ -176,7 +167,18 @@ The app can be deployed to any platform that supports Next.js:
 
 | Variable | Description | Required |
 |----------|-------------|----------|
-| `RESEND_API_KEY` | Your Resend API key | Yes |
+| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL | Yes |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Your Supabase anon key | Yes |
+
+## 📦 Dependencies
+
+The project includes the following key dependencies:
+- `next`: Next.js framework
+- `react` & `react-dom`: React library
+- `typescript`: TypeScript support
+- `@supabase/supabase-js`: Supabase client
+- `@supabase/auth-helpers-nextjs`: Next.js auth helpers
+- `@supabase/auth-helpers-react`: React auth helpers
 
 ## 🤝 Contributing
 
@@ -195,21 +197,23 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 If you encounter any issues:
 
 1. Check the browser console for errors
-2. Verify your Resend API key is correct
+2. Verify your Supabase credentials are correct
 3. Ensure all environment variables are set
 4. Check the Network tab for API response details
+5. Verify Supabase Auth is properly configured
 
 ## 🔮 Future Enhancements
 
-- [ ] Database integration for user management
-- [ ] Password-based authentication
+- [ ] Database integration for user profiles
+- [ ] Password-based authentication option
 - [ ] Social login (Google, GitHub)
 - [ ] Two-factor authentication
-- [ ] Email templates customization
-- [ ] Rate limiting for OTP requests
-- [ ] Session management
+- [ ] Rate limiting for magic link requests
 - [ ] User profile management
+- [ ] Real-time features with Supabase Realtime
+- [ ] File upload functionality
+- [ ] Payment integration
 
 ---
 
-**Built with ❤️ using Next.js and TypeScript**
+**Built with ❤️ using Next.js, TypeScript, and Supabase**

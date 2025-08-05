@@ -1,87 +1,81 @@
 "use client";
 
-import Image from "next/image";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import styles from './homepage.module.css';
+import Image from "next/image";
+import { supabase } from "@/lib/supabaseClient";
+import styles from "./homepage.module.css";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const router = useRouter();
 
-  const sendOtp = async (): Promise<void> => {
-    if (!email || email.trim() === '') {
-        alert('Please enter a valid email');
-        return;
-      }
+  const sendMagicLink = async () => {
+    if (!email.trim()) {
+      alert("Please enter a valid email.");
+      return;
+    }
 
-    const otp = Math.floor(100000 + Math.random() * 900000);
     setLoading(true);
 
-    console.log("Sending email with:", { email, otp });
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: "http://localhost:3000/auth/callback",
+      },
+    });
 
-    try {
-      const response = await fetch("/api/send-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          otp: otp,
-        }),
-      });
+    setLoading(false);
 
-      console.log("Response status:", response.status);
-      const result = await response.json();
-      console.log("Response result:", result);
-
-
-      if (response.ok) {
-        
-        localStorage.setItem("otp", otp.toString());
-        localStorage.setItem("email", email);
-
-        // Redirect to verification page
-        router.push("/verify");
-      } else {
-        alert(`Error: ${result.error}`);
-      }
-    } catch (error) {
-      console.error("Error sending email:", error);
-      alert("Failed to send OTP");
-    } finally {
-      setLoading(false);
+    if (error) {
+      alert("Failed to send login link. Please try again.");
+      console.error(error);
+    } else {
+      alert("Magic link sent! Check your email to continue.");
+      // No redirect here — user must click the link in their email
     }
   };
 
   return (
-    <main className={styles.container}>
-      <Image 
-        src="/images/smiling_burger.png" 
-        alt="FoodPay Logo" 
-        width={300} 
-        height={300} 
-        priority 
-      />
-      <h1 className={styles.heading}>Welcome to FoodPay!</h1>
-      <h4 className={styles.subheading}>Please enter your email to login</h4>
-      <input
-        type="email"
-        className={styles.input}
-        placeholder="Enter email"
-        value={email}
-        onChange={(e) => {
-          console.log("Email input changed:", e.target.value);
-          setEmail(e.target.value);
-        }}
-      />
-      <button
-        onClick={sendOtp}
-        disabled={loading || !email}
-        className={styles.button}
-      >
-        {loading ? "Sending..." : "Login"}
-      </button>
-    </main>
+    <div className={styles.pageWrapper}>
+      {/* Red columns on the left */}
+      <div className={styles.redColumn}></div>
+      <div className={styles.redColumn}></div>
+
+      {/* Main content */}
+      <main className={styles.container}>
+        <Image
+          src="/images/smiling_burger.png"
+          alt="FoodPay Logo"
+          width={300}
+          height={300}
+          priority
+        />
+        <h1 className={styles.heading}>Welcome to FoodPay!</h1>
+        <h4 className={styles.subheading}>Please enter your email to login</h4>
+
+        <input
+          type="email"
+          className={styles.input}
+          placeholder="Enter email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <button
+          className={styles.button}
+          onClick={sendMagicLink}
+          disabled={loading || !email.trim()}
+        >
+          {loading ? "Sending..." : "Login"}
+        </button>
+      </main>
+
+      {/* Red columns on the right */}
+      <div className={styles.redColumn}></div>
+      <div className={styles.redColumn}></div>
+
+      {/* White line */}
+      <div className={styles.whiteLine}></div>
+    </div>
   );
 }

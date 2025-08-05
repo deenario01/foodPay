@@ -5,10 +5,13 @@
     align-items: center;
     justify-content: center;
     padding: 3rem;
-    min-height: 100vh;
+    min-height: 85vh;
     background-color: var(--bg);
     color: var(--text);
     transition: background 0.3s ease, color 0.3s ease;
+    z-index: 2;
+    position: relative;
+    grid-column: 3; /* places container in central column */
   }
   
   .heading {
@@ -46,4 +49,5 @@
     cursor: pointer;
     color: var(--text);
   }
+  
   
