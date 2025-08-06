@@ -1,22 +1,23 @@
-# FoodPay - Supabase Authentication System
+# FoodPay 
 
-A modern, secure authentication system built with Next.js, TypeScript, and Supabase that uses email-based magic link authentication.
+A modern, secure app that eases how you order food and pay the bill. 
 
 ## 🚀 Features
 
-- **Magic Link Authentication**: Secure login using email and magic links
+- **OTP Authentication**: Secure login using email and 6-digit OTP
 - **Supabase Integration**: Full authentication backend powered by Supabase
 - **TypeScript Support**: Full type safety throughout the application
 - **Responsive Design**: Modern UI with professional styling
 - **Route Protection**: Automatic redirection for unauthorized access
 - **User Dashboard**: Protected dashboard with user information
 - **Session Management**: Automatic session handling with Supabase
+- **OTP Expiration**: 2-minute expiration for security
 
 ## 🛠️ Tech Stack
 
 - **Framework**: Next.js 15 (App Router)
 - **Language**: TypeScript
-- **Authentication**: Supabase Auth
+- **Authentication**: Supabase Auth with OTP
 - **Styling**: CSS Modules with modern design
 - **State Management**: React useState & useEffect
 - **Routing**: Next.js Navigation
@@ -31,9 +32,12 @@ foodPay/
 │   │   │   └── callback/
 │   │   │       └── page.tsx          # Auth callback handler
 │   │   ├── dashboard/
-│   │   │   ├── dashboard.module.css   # Dashboard styles
+│   │   │   ├── dashboard.module.css  # Dashboard styles
 │   │   │   └── page.tsx              # Protected dashboard page
-│   │   ├── homepage.module.css        # Homepage styles
+│   │   ├── verify/
+│   │   │   ├── verify.module.css     # Verify page styles
+│   │   │   └── page.tsx              # OTP verification page
+│   │   ├── homepage.module.css       # Homepage styles
 │   │   ├── globals.css               # Global styles
 │   │   ├── layout.tsx                # Root layout
 │   │   └── page.tsx                  # Login page
@@ -98,14 +102,15 @@ foodPay/
 
 1. **Login Page** (`/`)
    - User enters email address
-   - System sends magic link via Supabase Auth
-   - User receives email with authentication link
-   - User clicks link to authenticate
+   - System sends 6-digit OTP via Supabase Auth
+   - User is redirected to verification page
+   - Email and timestamp stored in localStorage
 
-2. **Auth Callback** (`/auth/callback`)
-   - Handles the magic link callback from Supabase
-   - Validates the authentication session
-   - Redirects to dashboard on success
+2. **Verification Page** (`/verify`)
+   - User enters the 6-digit OTP received via email
+   - System validates OTP against Supabase
+   - Checks for OTP expiration (2 minutes)
+   - On successful verification, user is redirected to dashboard
 
 3. **Dashboard** (`/dashboard`)
    - Protected page accessible only after successful authentication
@@ -114,21 +119,22 @@ foodPay/
 
 ### Security Features
 
-- **Magic Link Authentication**: Secure, passwordless authentication
-- **Supabase Session Management**: Automatic session handling
+- **OTP Generation**: 6-digit OTP via Supabase Auth
+- **OTP Expiration**: 2-minute expiration for security
+- **Local Storage**: Email and timestamp stored for verification
 - **Route Protection**: Automatic redirection for unauthorized access
 - **Input Validation**: Email format validation and required field checks
-- **Secure Callback Handling**: Proper authentication flow management
+- **Session Management**: Automatic session handling with Supabase
 
 ## 📧 Email Configuration
 
 The application uses Supabase Auth for email delivery:
 
 ### Supabase Auth
-- Handles magic link generation and delivery
+- Handles OTP generation and delivery
 - Manages authentication sessions
-- Provides secure callback handling
 - Uses Supabase's built-in email templates
+- Provides secure OTP verification
 
 ## 🎨 UI Components
 
@@ -139,6 +145,13 @@ The application uses Supabase Auth for email delivery:
 - Loading states for better UX
 - Disabled button when email is empty
 - FoodPay branding with smiling burger logo
+
+### Verification Page
+- Clean, centered design
+- OTP input with proper formatting
+- Real-time validation feedback
+- Secure OTP comparison
+- Expiration handling
 
 ### Dashboard
 - Clean, professional design
@@ -208,11 +221,13 @@ If you encounter any issues:
 - [ ] Password-based authentication option
 - [ ] Social login (Google, GitHub)
 - [ ] Two-factor authentication
-- [ ] Rate limiting for magic link requests
+- [ ] Rate limiting for OTP requests
 - [ ] User profile management
 - [ ] Real-time features with Supabase Realtime
 - [ ] File upload functionality
 - [ ] Payment integration
+- [ ] Food ordering system
+- [ ] Payment processing
 
 ---
 

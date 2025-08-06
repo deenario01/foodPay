@@ -1,17 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { supabase } from "@/lib/supabaseClient";
 import styles from "./homepage.module.css";
 
 export default function Login() {
-  const [email, setEmail] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  const sendMagicLink = async () => {
-    if (!email.trim()) {
-      alert("Please enter a valid email.");
+  const sendOtp = async () => {
+    if (loading) return;
+
+    if (!email.trim() || !email.includes("@")) {
+      alert("Please enter a valid email address.");
       return;
     }
 
@@ -20,28 +24,25 @@ export default function Login() {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: "http://localhost:3000/auth/callback",
+        shouldCreateUser: true,
+        emailRedirectTo: `${location.origin}/dashboard`, // required for Supabase auth flow
       },
     });
 
-    setLoading(false);
-
     if (error) {
-      alert("Failed to send login link. Please try again.");
-      console.error(error);
+      alert("Login failed. Please try again.");
+      console.error("Supabase error:", error.message);
     } else {
-      alert("Magic link sent! Check your email to continue.");
-      // No redirect here — user must click the link in their email
+      localStorage.setItem("email", email);
+      localStorage.setItem("otp_sent_at", Date.now().toString());
+      router.push("/verify");
     }
+
+    setLoading(false);
   };
 
   return (
     <div className={styles.pageWrapper}>
-      {/* Red columns on the left */}
-      <div className={styles.redColumn}></div>
-      <div className={styles.redColumn}></div>
-
-      {/* Main content */}
       <main className={styles.container}>
         <Image
           src="/images/smiling_burger.png"
@@ -49,9 +50,9 @@ export default function Login() {
           width={300}
           height={300}
           priority
+          className={styles.image}
         />
         <h1 className={styles.heading}>Welcome to FoodPay!</h1>
-        <h4 className={styles.subheading}>Please enter your email to login</h4>
 
         <input
           type="email"
@@ -59,23 +60,17 @@ export default function Login() {
           placeholder="Enter email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          disabled={loading}
         />
 
         <button
+          onClick={sendOtp}
+          disabled={loading || !email}
           className={styles.button}
-          onClick={sendMagicLink}
-          disabled={loading || !email.trim()}
         >
           {loading ? "Sending..." : "Login"}
         </button>
       </main>
-
-      {/* Red columns on the right */}
-      <div className={styles.redColumn}></div>
-      <div className={styles.redColumn}></div>
-
-      {/* White line */}
-      <div className={styles.whiteLine}></div>
     </div>
   );
 }
